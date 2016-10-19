@@ -122,8 +122,8 @@
 
         <p>{{item.description}}</p>
         <div class="topics">
-          <div class$="label category {{item.category}}">
-            <span class="text">{{item.category}}</span>
+          <div class$="label category {{item.category.id}}">
+            <span class="text">{{item.category.name}}</span>
           </div>
           <template is="dom-repeat" items="{{_isTag(item.tags, item.category)}}" as="tag">
             <div class="label">
@@ -146,11 +146,11 @@
         item: Object
       },
       _getCardClass: function(category) {
-        return category + " card";
+        return category.id + " card";
       },
       _isTag: function(tags, category) {
         return tags.filter(function(tag) {
-          return tag !== category[0];
+          return tag !== category.id;
         }).map(function(tagId) {
           return this.item.allTags[tagId];
         }.bind(this));

@@ -24,6 +24,9 @@
       <template is="dom-repeat" id="resources" items="{{filteredResources}}" as="item" initialCount="20" xfilter="_isVisible">
         <resource-card mobile-layout$="{{mobile}}" item="{{item}}"></resource-card>
       </template>
+      <template is="dom-if" if="{{_notFound(filteredResources)}}">
+        <h2>No resources found. Please modify your selection.</h2>
+      </template>
     </div>
 
   </template>
@@ -50,9 +53,9 @@
       },
 
       _getCategory: function(resourceTags, tags) {
-        return resourceTags.filter(function(tag) {
-          if(tags[tag] && tags[tag].type === "category") {
-            return tags[tag].id;
+        return this._toArray(tags).filter(function(tag) {
+          if(resourceTags.includes(tag.id) && tag.type === "category") {
+            return tag;
           }
         });
       },
@@ -61,13 +64,12 @@
         var filterTags = this._filterTags(tags);
 
         return this._toArray(resources).filter(function(resource) {
-          resource.category = this._getCategory(resource.tags, tags);
+          var category = this._getCategory(resource.tags, tags);
+          resource.category = category[0];
           resource.allTags = tags;
-
           if(!filterTags.length) {
             return resource;
           }
-
           return filterTags.every(function(tag) {
             return resource.tags.some(function(tagId) {
               return tagId === tag.id;
@@ -75,6 +77,10 @@
           });
 
         }.bind(this));
+      },
+
+      _notFound: function(resources) {
+        return !Object.keys(resources).length;
       },
 
       properties: {

@@ -37,7 +37,11 @@
       --paper-checkbox-unchecked-ink-color: #CDDC39;
       --paper-checkbox-checked-ink-color: #CDDC39;
     }
-
+    #event {
+      --paper-checkbox-checked-color:  #FF5722;
+      --paper-checkbox-unchecked-ink-color:  #FF5722;
+      --paper-checkbox-checked-ink-color:  #FF5722;
+    }
     app-toolbar {
       background-color: #fafafa;
     }
@@ -94,7 +98,7 @@
       _toggleTag: function(event) {
         var tags = this.tags;
         this.tags = {};
-        tags[event.target.id].selected = event.target.checked;
+        tags[event.currentTarget.id].selected = event.currentTarget.checked;
         this.set('tags', tags);
       },
 
