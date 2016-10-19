@@ -1,0 +1,116 @@
+<dom-module id="tag-drawer">
+  <style>
+    :root {
+    }
+    #article {
+      --paper-checkbox-checked-color:  #FFC107;
+      --paper-checkbox-unchecked-ink-color: #FFC107;
+      --paper-checkbox-checked-ink-color: #FFC107;
+    }
+    #code {
+      --paper-checkbox-checked-color:  #FF5722;
+      --paper-checkbox-unchecked-ink-color: #FF5722;
+      --paper-checkbox-checked-ink-color: #FF5722;
+    }
+    #demo {
+      --paper-checkbox-checked-color:  #8BC34A;
+      --paper-checkbox-unchecked-ink-color: #8BC34A;
+      --paper-checkbox-checked-ink-color: #8BC34A;
+    }
+    #tutorial {
+      --paper-checkbox-checked-color: #FF9800;
+      --paper-checkbox-unchecked-ink-color: #FF9800;
+      --paper-checkbox-checked-ink-color: #FF9800;
+    }
+    #tool {
+      --paper-checkbox-checked-color: #2196F3;
+      --paper-checkbox-unchecked-ink-color: #2196F3;
+      --paper-checkbox-checked-ink-color: #2196F3;
+    }
+    #slides {
+      --paper-checkbox-checked-color: #FF4081;
+      --paper-checkbox-unchecked-ink-color: #FF4081;
+      --paper-checkbox-checked-ink-color: #FF4081;
+    }
+    #video {
+      --paper-checkbox-checked-color: #CDDC39;
+      --paper-checkbox-unchecked-ink-color: #CDDC39;
+      --paper-checkbox-checked-ink-color: #CDDC39;
+    }
+
+    app-toolbar {
+      background-color: #fafafa;
+    }
+    .checkbox-group {
+      margin: 20px 0 20px 22px;
+    }
+    paper-checkbox {
+      @apply(--layout-flex);
+      width: 100%;
+      /*--paper-checkbox-unchecked-background-color: yellow;*/
+    }
+
+    paper-radio-group {
+      margin-left: 10px;
+    }
+    paper-radio-button {
+      width: 100%;
+    }
+  </style>
+
+  <template>
+    <app-toolbar>
+      <div main-title>Filter by tag</div>
+    </app-toolbar>
+
+    <div class="checkbox-group">
+      <template is="dom-repeat" id="tags" items="{{_filterByType('category', tags)}}" as="tag">
+        <paper-checkbox flex toggles name="{{tag.id}}" on-tap="_toggleTag" id$="{{tag.id}}">
+          {{tag.name}}
+        </paper-checkbox>
+      </template>
+    </div>
+
+    <div class="checkbox-group">
+      <template is="dom-repeat" id="tags" items="{{_filterByType('tag', tags)}}" as="tag">
+        <paper-checkbox flex toggles name="{{tag.id}}" on-tap="_toggleTag" id$="{{tag.id}}">
+          {{tag.name}}
+        </paper-checkbox>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'tag-drawer',
+      properties: {
+        tags: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      //TODO: find a better way!
+      _toggleTag: function(event) {
+        var tags = this.tags;
+        this.tags = {};
+        tags[event.target.id].selected = event.target.checked;
+        this.set('tags', tags);
+      },
+
+      _toArray: function(obj) {
+        return Object.keys(obj).map(function(key) {
+          return obj[key];
+        });
+      },
+
+      _filterByType: function(type) {
+        var arr = this._toArray(this.tags);
+        return arr.filter(function(item) {
+          return item.type === type;
+        });
+      }
+
+    });
+  </script>
+</dom-module>

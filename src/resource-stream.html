@@ -1,0 +1,95 @@
+<link rel="import" href="resource-card.html">
+<dom-module id="resource-stream">
+
+  <template>
+    <style>
+      .main {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+      	-ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+      	-ms-flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+      	flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      resource-card {
+        width: 500px;
+      }
+    </style>
+    <div class="main">
+      <template is="dom-repeat" id="resources" items="{{filteredResources}}" as="item" initialCount="20" xfilter="_isVisible">
+        <resource-card mobile-layout$="{{mobile}}" item="{{item}}"></resource-card>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'resource-stream',
+
+      _isVisible: function(resource) {
+        console.log('resource', resource);
+      },
+
+      //TODO: add this to a local library?
+      _toArray: function(obj) {
+        return Object.keys(obj).map(function(key) {
+          return obj[key];
+        });
+      },
+
+      _filterTags: function(tags) {
+        return this._toArray(tags).filter(function(tag) {
+          return tag.selected;
+        });
+      },
+
+      _getCategory: function(resourceTags, tags) {
+        return resourceTags.filter(function(tag) {
+          if(tags[tag] && tags[tag].type === "category") {
+            return tags[tag].id;
+          }
+        });
+      },
+
+      _filterResources: function(resources, tags) {
+        var filterTags = this._filterTags(tags);
+
+        return this._toArray(resources).filter(function(resource) {
+          resource.category = this._getCategory(resource.tags, tags);
+          resource.allTags = tags;
+
+          if(!filterTags.length) {
+            return resource;
+          }
+
+          return filterTags.every(function(tag) {
+            return resource.tags.some(function(tagId) {
+              return tagId === tag.id;
+            });
+          });
+
+        }.bind(this));
+      },
+
+      properties: {
+        resources: Object,
+        tags: {
+          type: Object,
+          notify: true
+        },
+        filteredResources: {
+          type: Array,
+          computed: '_filterResources(resources, tags)',
+          value: []
+        }
+      }
+    });
+  </script>
+
+</dom-module>

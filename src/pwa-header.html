@@ -1,0 +1,23 @@
+<dom-module id="pwa-header">
+  <style>
+    app-toolbar {
+      background-color: #4285f4;
+      color: #fff;
+    }
+  </style>
+
+  <template>
+    <app-header>
+      <app-toolbar>
+        <content select="[drawer-toggle]"></content>
+        <div main-title>Progressive Web App Resources</div>
+      </app-toolbar>
+    </app-header>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'pwa-header'
+    });
+  </script>
+</dom-module>

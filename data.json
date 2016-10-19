@@ -1,0 +1,79 @@
+{
+  "tags": {
+    "pwa": {
+      "id": "pwa",
+      "icon": "hardware:devices-other",
+      "name": "Progressive Web App",
+      "type": "tag"
+    },
+    "service-worker": {
+      "id": "service-worker",
+      "icon": "icons:stars",
+      "name": "Service Workers",
+      "type": "tag"
+    },
+    "push-api": {
+      "id": "push-api",
+      "name": "Push API",
+      "type": "tag"
+    },
+    "offline": {
+      "id": "offline",
+      "icon": "device:signal-wifi-off",
+      "name": "Offline",
+      "type": "tag"
+    },
+    "polymer": {
+      "id": "polymer",
+      "icon": "icons:polymer",
+      "name": "Polymer",
+      "type": "tag"
+    },
+    "web-components": {
+      "id": "web-components",
+      "name": "Web Components",
+      "type": "tag"
+    },
+    "event": {
+      "id": "event",
+      "name": "Event",
+      "type": "category"
+    },
+    "article": {
+      "id": "article",
+      "name": "Article",
+      "type": "category"
+    },
+    "code": {
+      "id": "code",
+      "name": "Open source code",
+      "type": "category"
+    },
+    "demo": {
+      "id": "demo",
+      "name": "Demo",
+      "type": "category"
+    },
+    "slides": {
+      "id": "slides",
+      "name": "Slides",
+      "type": "category"
+    },
+    "video": {
+      "id": "video",
+      "name": "Video",
+      "type": "category"
+    },
+    "tool": {
+      "id": "reference",
+      "name": "Reference",
+      "type": "category"
+    },
+    "tutorial": {
+      "id": "tutorial",
+      "name": "Tutorial",
+      "type": "category"
+    }
+  }
+
+}

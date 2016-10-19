@@ -1,0 +1,139 @@
+<dom-module id="add-resource">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      },
+      paper-radio-button {
+        display: inline-block;
+      }
+    </style>
+      <div class="container">
+        <paper-card heading="Add a Resource">
+        <div class="card-content">
+          <form is="iron-form" id="newResource" on-submit="_saveResource">
+            <label>Resource type:</label>
+
+            <paper-radio-group id="resourceType" on-change="_selectCategory" required="true">
+              <template is="dom-repeat" items="{{_computeCategories(tags)}}" as="tag">
+                <paper-radio-button name="{{tag.id}}">{{tag.name}}</paper-radio-button>
+              </template>
+            </paper-radio-group>
+            <paper-input type="hidden" name="assignedCategory" value={{assignedCategory}} required="true"></paper-input>
+
+            <paper-input value={{date}} name="date" id="date" label="Publication Date"></paper-input>
+            <paper-input value={{link}} name="link" id="link" label="Link"
+                required="true" errorMessage="You must provide a link"></paper-input>
+            <paper-input value={{title}} name="title" id="title" label="Title"
+                required="true"></paper-input>
+            <paper-input value={{author}} name="author" id="author" label="Author"></paper-input>
+            <paper-input value={{description}} name="description" id="description" label="Description"></paper-input>
+
+            Tags:
+            <template is="dom-repeat" id="tags" items="{{_computeTags(tags)}}" as="tag" required="true">
+              <paper-checkbox class='tag' on-tap="_selectTag" value="{{tag}}">{{tag.name}}</paper-checkbox>
+            </template>
+            <paper-input type="hidden" name="assignedTags" value="{{assignedTags}}" xrequired="true"></paper-input>
+            <div class="card-actions">
+              <paper-button raised on-tap="_saveResource">Submit</paper-button>
+              <paper-button raised on-tap="_clearForm">Cancel</paper-button>
+            </div>
+          </form>
+        </div>
+      </paper-card>
+    </div>
+
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'add-resource',
+      ready: function() {},
+      listeners: {},
+
+      _computeTagsGeneric: function(allTags, type) {
+        var tags = [];
+        for (key in allTags) {
+          if (allTags[key].type === type) {
+            tags.push(allTags[key])
+          }
+        }
+        return tags;
+      },
+      _computeTags: function(allTags) {
+        return this._computeTagsGeneric(allTags, 'tag');
+      },
+      _computeCategories: function(allTags) {
+        return this._computeTagsGeneric(allTags, 'category');
+      },
+      _selectCategory: function(event) {
+        this.assignedCategory = event.target.name;
+      },
+      _selectTag: function(event) {
+        var tag = event.target.value;
+        if (event.target.checked) {
+          this.push('assignedTags', tag.id);
+        } else {
+          var index = this.assignedTags.indexOf(tag.id);
+          this.splice('assignedTags', index, 1);
+        }
+      },
+      _clearForm: function() {
+        this.date = '';
+        this.link = '';
+        this.title = '';
+        this.description = '';
+      },
+      _saveResource: function(e) {
+        var form = Polymer.dom(this.root).querySelector('form');
+
+        if(form.validate()){
+          var data = form.serialize();
+          var resource = {
+            title: data.title,
+            description: data.description,
+            link: data.link,
+            date: data.date || (new Date).getTime(), // TODO: date selector in form
+            tags: data.assignedTags.concat([data.assignedCategory])
+          }
+          firebase.database().ref('/resources').push(resource);
+          // TODO: show success and clear form
+        } else {
+          // TODO: show toast probably
+        }
+      },
+
+      properties: {
+        date: {
+          type: Date
+        },
+        title: {
+          type: String,
+          value: ''
+        },
+        link: {
+          type: String,
+          value: ''
+        },
+        description: {
+          type: String,
+          value: ''
+        },
+        assignedTags: {
+          type: Array,
+          value: []
+        },
+        author: {
+          type: String,
+          value: ''
+        },
+        tags: Object,
+        assignedCategory: String
+      }
+
+    });
+  </script>
+
+</dom-module>
