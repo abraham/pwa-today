@@ -84,6 +84,7 @@
         this.date = '';
         this.link = '';
         this.title = '';
+        this.author = '';
         this.description = '';
       },
       _saveResource: function(e) {
@@ -93,6 +94,7 @@
           var data = form.serialize();
           var resource = {
             title: data.title,
+            author: data.author,
             description: data.description,
             link: data.link,
             date: data.date || (new Date).getTime(), // TODO: date selector in form
