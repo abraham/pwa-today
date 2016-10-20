@@ -21,7 +21,7 @@
       }
     </style>
     <div class="main">
-      <template is="dom-repeat" id="resources" items="{{filteredResources}}" as="item" initialCount="20" xfilter="_isVisible">
+      <template is="dom-repeat" id="resources" items="{{filteredResources}}" as="item" initialCount="20" sort="_sortResources" xfilter="_isVisible">
         <resource-card mobile-layout$="{{mobile}}" item="{{item}}"></resource-card>
       </template>
       <template is="dom-if" if="{{_notFound(filteredResources)}}">
@@ -44,6 +44,10 @@
         return Object.keys(obj).map(function(key) {
           return obj[key];
         });
+      },
+
+      _sortResources: function(a, b) {
+        return b.date - a.date;
       },
 
       _filterTags: function(tags) {
